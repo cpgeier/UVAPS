@@ -3,6 +3,11 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 
 # logging into SSO
+letterList = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
+              'u', 'v', 'w', 'x', 'y', 'z']
+driver = []
+[drivers = drivers.append('driver_' + letter) for a in range(letterList) ]
+
 driver = webdriver.Chrome('C:/Python35/chromedriver.exe')  # Optional argument, if not specified will search path.
 driver.get('https://search.people.virginia.edu/search?combine=')
 username_input = driver.find_element_by_name('user')
@@ -54,3 +59,11 @@ for rows in range(len(compIDS)):
     resultFile.write(compIDS[rows]+'\n')
 
 driver.quit()
+
+#TODO: Gather names from classes
+
+#TODO: Object orient
+
+#TODO: Goto each UVA Comp ID profile and retrieve profile info
+
+#TODO: Categorize persons (Undergraduate, First year)
