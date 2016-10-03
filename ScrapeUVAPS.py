@@ -7,8 +7,34 @@ A UVA Computing ID is needed to access the database.
 Use data responsibly.
 '''
 
+import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+
+
+class Interface:
+    def __init__(self):
+        print('----- Christopher Geier Presents -----')
+        time.sleep(2)
+        print('\n\n' + '      Everyone        ' + '\n\n')
+        time.sleep(1)
+        while True:
+            print('Press 1 to scrape everyones computing ID.')
+            print('Press 2 to process and combine scraped IDs.')
+            print('Press 3 to retrieve everyones profile information.')
+            self.i = input('Please Enter Option: ')
+            self.username = input('Please enter UVa Username: ')
+            self.password = input('Please enter UVa Password: ')
+            self.letterList = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
+                               's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+            if self.i == 1:
+                UVAPSComputerIDS(self.username, self.password, self.letterList)
+            elif self.i == 2:
+                CleanLetterSets()
+            elif self.i == 3:
+                UVAPSProfileInfo(self.username, self.password,)
+            else:
+                print('Unrecognized Input...')
 
 
 class UVAPSComputerIDS:
@@ -38,7 +64,7 @@ class UVAPSComputerIDS:
     def change_page(self):
         # take search through each letter because blank search is 400 page limited
         page_num = 0
-        while page_num < 399:
+        while page_num < 400:
             # retrieve page
             self.driver.get('https://search.people.virginia.edu/search?combine=' + self.letter + '&page=' +
                             str(page_num))
@@ -73,19 +99,37 @@ class UVAPSComputerIDS:
     # def results(self):
     #     return self.compIDS
 
-# class CleanLetterSets:
 
-#  TODO: This
+class CleanLetterSets:
+    def __init__(self):
+        self.letterList = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
+                           's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+        self.completeList = []
+        print('***** Importing Sets *****')
+        self.import_sets()
+        self.completeList = list(set(self.completeList))
+        final_file = open('UVA_IDS', 'w')
+        final_file.write(self.completeList)
+        final_file.close()
+        print('***** Final list export complete *****')
+
+    def import_sets(self):
+        """ Builds complete list from letter files """
+        for i in range(len(self.letterList)):
+            a = open(self.letterList[i])
+            self.completeList.extend(a)
+            print('***** Import for letter ' + i + ' completed *****')
 
 
 class UVAPSProfileInfo:
-    def __init__(self, username, password, compids):
+    def __init__(self, username, password):
         self.driver = webdriver.Chrome('C:/Python35/chromedriver.exe')
         self.login_sso()
         self.username = username
         self.password = password
         self.a = []
-        for profile in compids:
+        self.compids = open('UVA_IDS')
+        for profile in self.compids:
             self.a.append(self.profile_info(profile))
         self.save()
 
@@ -127,6 +171,6 @@ class UVAPSProfileInfo:
         return attributes
 
     def save(self):
-        final_file = open('Total', 'w')
+        final_file = open('All_Profiles', 'w')
         for rows in range(len(self.a)):
             final_file.write(self.a[rows] + '\n')
