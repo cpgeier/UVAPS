@@ -1,3 +1,8 @@
+'''
+Christopher Geier Presents:
+
+Threading options to use ScrapeUVAPS
+'''
 import threading
 import ScrapeUVAPS
 import multiprocessing

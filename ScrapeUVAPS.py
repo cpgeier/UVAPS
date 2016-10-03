@@ -1,3 +1,12 @@
+'''
+Christopher Geier Presents:
+
+A method to download a list of everyone's email, username, and name at the University of Virginia.
+
+A UVA Computing ID is needed to access the database.
+Use data responsibly.
+'''
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
