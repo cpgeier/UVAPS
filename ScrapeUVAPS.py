@@ -29,7 +29,7 @@ class UVAPSComputerIDS:
     def change_page(self):
         # take search through each letter because blank search is 400 page limited
         page_num = 0
-        while page_num > 2:
+        while page_num < 399:
             # retrieve page
             self.driver.get('https://search.people.virginia.edu/search?combine=' + self.letter + '&page=' +
                             str(page_num))
@@ -52,11 +52,21 @@ class UVAPSComputerIDS:
         print('***** Writing File *****')
         self.compIDS = list(set(self.compIDS))
         # Write id list to file
-        result_file = open('UVACOMPIDS2', 'w')
+        result_file = open(self.letter, 'w')
         for rows in range(len(self.compIDS)):
             result_file.write(self.compIDS[rows] + '\n')
+        # intermediate_file = open('foobar','w')
+        # intermediate_file.write(self.compIDS)
+        # intermediate_file.close()
         print('***** File write completed for letter ' + self.letter + ' *****')
         return self.compIDS
+
+    # def results(self):
+    #     return self.compIDS
+
+# class CleanLetterSets:
+
+#  TODO: This
 
 
 class UVAPSProfileInfo:
