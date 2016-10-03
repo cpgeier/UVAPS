@@ -1,9 +1,8 @@
-import threading
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
 
-class ScrapeUVAPS:
+class UVAPSComputerIDS:
     def __init__(self, user, pw, thread_letter):
         self.letter = thread_letter
         self.username = user
@@ -23,14 +22,14 @@ class ScrapeUVAPS:
         password_input = self.driver.find_element_by_name('pass')
         submit_input = self.driver.find_element_by_xpath('//*[@id="loginBoxes"]/fieldset[2]/span[2]/form/p[3]/input[1]')
 
-        username_input.send_keys(username)
-        password_input.send_keys(password)
+        username_input.send_keys(self.username)
+        password_input.send_keys(self.password)
         submit_input.submit()
 
     def change_page(self):
         # take search through each letter because blank search is 400 page limited
         page_num = 0
-        while page_num > 399:
+        while page_num > 2:
             # retrieve page
             self.driver.get('https://search.people.virginia.edu/search?combine=' + self.letter + '&page=' +
                             str(page_num))
@@ -57,12 +56,58 @@ class ScrapeUVAPS:
         for rows in range(len(self.compIDS)):
             result_file.write(self.compIDS[rows] + '\n')
         print('***** File write completed for letter ' + self.letter + ' *****')
+        return self.compIDS
 
 
-#TODO: Gather names from classes
+class UVAPSProfileInfo:
+    def __init__(self, username, password, compids):
+        self.driver = webdriver.Chrome('C:/Python35/chromedriver.exe')
+        self.login_sso()
+        self.username = username
+        self.password = password
+        self.a = []
+        for profile in compids:
+            self.a.append(self.profile_info(profile))
+        self.save()
 
-#TODO: Object orient
+    def login_sso(self):
+        ''' Logs into SSO '''
+        print('***** Initializing WebDriver *****')
+        self.driver.get('https://search.people.virginia.edu/search?combine=')
+        username_input = self.driver.find_element_by_name('user')
+        password_input = self.driver.find_element_by_name('pass')
+        submit_input = self.driver.find_element_by_xpath('//*[@id="loginBoxes"]/fieldset[2]/span[2]/form/p[3]/input[1]')
 
-#TODO: Goto each UVA Comp ID profile and retrieve profile info
+        username_input.send_keys(self.username)
+        password_input.send_keys(self.password)
+        submit_input.submit()
 
-#TODO: Categorize persons (Undergraduate, First year)
+    def profile_info(self, profile_name):
+        ''' Scrapes profile and returns dictionary of profile elements '''
+
+        self.driver.get('https://search.people.virginia.edu/person/' + profile_name)
+
+        attribute_search = self.driver.find_elements(By.XPATH, '//body//div[contains(@class,"attribute")]')
+        attributes = []
+        for att in attribute_search:
+            text = att.text
+            attributes.append(text)
+        attributes = attributes[1:]
+        attributes = dict(attributes[i:i + 2] for i in range(0, len(attributes), 2))
+
+        name_search = self.driver.find_elements(By.XPATH, '//body//h3')
+        name = []
+        for nm in name_search:
+            text = nm.text
+            name.append(text)
+        name = str(name[0])
+        name = name[0:name.rindex("(")]
+
+        attributes['Name'] = name
+        attributes['Profile'] = profile_name
+        return attributes
+
+    def save(self):
+        final_file = open('Total', 'w')
+        for rows in range(len(self.a)):
+            final_file.write(self.a[rows] + '\n')
