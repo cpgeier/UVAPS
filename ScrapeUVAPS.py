@@ -8,6 +8,7 @@ Use data responsibly.
 '''
 
 import time
+from tqdm import tqdm
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
@@ -64,8 +65,11 @@ class UVAPSComputerIDS:
     def change_page(self):
         # take search through each letter because blank search is 400 page limited
         page_num = 0
+        pbar = tqdm(total=400)
         while page_num < 400:
+            # TODO: Exit on null result
             # retrieve page
+            pbar.update(1)
             self.driver.get('https://search.people.virginia.edu/search?combine=' + self.letter + '&page=' +
                             str(page_num))
             # find all links to ids
@@ -109,7 +113,7 @@ class CleanLetterSets:
         self.import_sets()
         self.completeList = list(set(self.completeList))
         final_file = open('UVA_IDS', 'w')
-        final_file.write(self.completeList)
+        final_file.write(str(self.completeList))
         final_file.close()
         print('***** Final list export complete *****')
 
@@ -117,19 +121,22 @@ class CleanLetterSets:
         """ Builds complete list from letter files """
         for i in range(len(self.letterList)):
             a = open(self.letterList[i])
-            self.completeList.extend(a)
-            print('***** Import for letter ' + i + ' completed *****')
+            atext = a.readlines()
+            for ind in range(len(atext)):
+                atext[ind] = atext[ind].rstrip()
+            self.completeList.extend(atext)
+            print('***** Import for letter ' + self.letterList[i] + ' completed *****')
 
 
 class UVAPSProfileInfo:
-    def __init__(self, username, password):
+    def __init__(self, username, password, compids):
         self.driver = webdriver.Chrome('C:/Python35/chromedriver.exe')
-        self.login_sso()
         self.username = username
         self.password = password
+        self.login_sso()
         self.a = []
-        self.compids = open('UVA_IDS')
-        for profile in self.compids:
+
+        for profile in tqdm(compids):
             self.a.append(self.profile_info(profile))
         self.save()
 
@@ -171,6 +178,9 @@ class UVAPSProfileInfo:
         return attributes
 
     def save(self):
+        print('***** Writing File *****')
         final_file = open('All_Profiles', 'w')
         for rows in range(len(self.a)):
-            final_file.write(self.a[rows] + '\n')
+            final_file.write(str(self.a[rows]) + '\n')
+            print('     Row ' + str(rows) + ' complete    ')
+        print('***** File Write Complete *****')

@@ -12,8 +12,7 @@ import time
 username = input('Enter Computing ID Username: ')
 password = input('Enter Computing ID Password: ')
 
-letterList = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
-              's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+letterList = ['x', 'y', 'z']
 
 for i in range(len(letterList)):
     ScrapeUVAPS.UVAPSComputerIDS(username, password, letterList[i])
