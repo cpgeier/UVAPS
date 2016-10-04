@@ -9,7 +9,7 @@ import ScrapeUVAPS
 username = input('Enter Computing ID Username: ')
 password = input('Enter Computing ID Password: ')
 
-file = open('listcomp','r')
+file = open('listcomp', 'r')
 fileText = file.read()
 profileList = fileText.split('\n')
 

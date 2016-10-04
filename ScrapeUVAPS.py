@@ -3,7 +3,7 @@ Christopher Geier Presents:
 
 A method to download a list of everyone's email, username, and name at the University of Virginia.
 
-A UVA Computing ID is needed to access the database.
+A UVA Computing ID and password is needed to access the database.
 Use data responsibly.
 '''
 
@@ -33,7 +33,11 @@ class Interface:
             elif self.i == 2:
                 CleanLetterSets()
             elif self.i == 3:
-                UVAPSProfileInfo(self.username, self.password,)
+                profiles = input('Enter name of profiles file: ')
+                file = open(str(profiles), 'r')
+                filetext = file.read()
+                profilelist = filetext.split('\n')
+                UVAPSProfileInfo(self.username, self.password, profilelist)
             else:
                 print('Unrecognized Input...')
 
