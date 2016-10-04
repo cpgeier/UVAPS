@@ -20,19 +20,20 @@ class Interface:
         print('\n\n' + '      Everyone        ' + '\n\n')
         time.sleep(1)
         while True:
-            print('Press 1 to scrape everyones computing ID.')
-            print('Press 2 to process and combine scraped IDs.')
-            print('Press 3 to retrieve everyones profile information.')
-            self.i = input('Please Enter Option: ')
             self.username = input('Please enter UVa Username: ')
             self.password = input('Please enter UVa Password: ')
             self.letterList = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
                                's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-            if self.i == 1:
+            print('Press 1 to scrape everyones computing ID.')
+            print('Press 2 to process and combine scraped IDs.')
+            print('Press 3 to retrieve everyones profile information.')
+            self.i = input('Please Enter Option: ')
+
+            if self.i == str(1):
                 UVAPSComputerIDS(self.username, self.password, self.letterList)
-            elif self.i == 2:
+            elif self.i == str(2):
                 CleanLetterSets()
-            elif self.i == 3:
+            elif self.i == str(3):
                 profiles = input('Enter name of profiles file: ')
                 file = open(str(profiles), 'r')
                 filetext = file.read()
@@ -188,3 +189,5 @@ class UVAPSProfileInfo:
             final_file.write(str(self.a[rows]) + '\n')
             print('     Row ' + str(rows) + ' complete    ')
         print('***** File Write Complete *****')
+
+Interface()
