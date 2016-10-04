@@ -3,6 +3,8 @@ Christopher Geier Presents:
 
 Threading options to use ScrapeUVAPS
 '''
+
+'''
 import threading
 import ScrapeUVAPS
 import multiprocessing
@@ -80,3 +82,4 @@ for i in range(len(letterList)):
 #ScrapeUVAPS.UVAPSProfileInfo(username, password, compids)
 
 #TODO: Gather names from classes
+'''
