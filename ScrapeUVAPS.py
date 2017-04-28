@@ -64,19 +64,8 @@ class UVAPSComputerIDS:
         result_file = open(self.letter, 'w')
         for rows in range(len(self.compIDS)):
             result_file.write(self.compIDS[rows] + '\n')
-        # intermediate_file = open('foobar','w')
-        # intermediate_file.write(self.compIDS)
-        # intermediate_file.close()
         print('***** File write completed for letter ' + self.letter + ' *****')
         return self.compIDS
-
-    # def results(self):
-    #     return self.compIDS
-
-# class CleanLetterSets:
-
-#  TODO: This
-
 
 class UVAPSProfileInfo:
     def __init__(self, username, password, compids):
